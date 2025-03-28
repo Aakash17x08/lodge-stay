@@ -1,0 +1,259 @@
+<% layout("/layouts/boilerplate") -%>
+
+  <style>
+    #filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .filter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      cursor: pointer;
+      min-width: 80px;
+      transition: opacity 0.3s;
+      animation: slide-in 0.5s ease-in-out forwards;
+    }
+
+    /* Apply delay for a staggered effect */
+    .filter:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .filter:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .filter:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .filter:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .filter:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .filter:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+
+    .filter:nth-child(7) {
+      animation-delay: 0.7s;
+    }
+
+    .filter:nth-child(8) {
+      animation-delay: 0.8s;
+    }
+
+    .filter:nth-child(9) {
+      animation-delay: 0.9s;
+    }
+
+    .filter:nth-child(10) {
+      animation-delay: 1s;
+    }
+
+    .tax-info {
+      display: none;
+    }
+
+    .tax-toggle {
+      border: 1px solid black;
+      border-radius: 1rem;
+      height: 3.5rem;
+      padding: 1rem;
+    }
+
+    /* Custom Card Design */
+    .custom-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+    }
+
+    .custom-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .custom-card-img {
+      height: 200px;
+      object-fit: cover;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .card-body {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .price-section {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    @keyframes slide-in {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Responsive for small screens */
+    @media (max-width: 600px) {
+      #filters {
+        gap: 0.5rem;
+      }
+
+      .filter {
+        min-width: 60px;
+      }
+
+      .filter p {
+        font-size: 0.7rem;
+      }
+
+      .filter:nth-child(n+4) {
+        display: none;
+      }
+    }
+
+    /* main card hover effect */
+    .main-card {
+      /* border: 2px solid black; */
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease-in-out;
+      padding: 15px;
+
+    }
+
+    .main-card:hover {
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
+    }
+  </style>
+
+  <div id="filters">
+    <div class="filter">
+      <div><i class="fa-solid fa-fire"></i></div>
+      <p>Trending</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-bed"></i></div>
+      <p>Rooms</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain-city"></i></div>
+      <p>Mountain City</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-brands fa-fort-awesome"></i></div>
+      <p>Castle</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-umbrella-beach"></i></div>
+      <p>Beach</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-hotel"></i></div>
+      <p>Hotel</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-mountain"></i></div>
+      <p>Near Mountain</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-person-swimming"></i></div>
+      <p>Swimming Pool</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-tents"></i></div>
+      <p>Tents</p>
+    </div>
+    <div class="filter">
+      <div><i class="fa-solid fa-tractor"></i></div>
+      <p>Farm</p>
+    </div>
+    <div class="tax-toggle">
+      <div class="form-check-reverse form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">Display with Taxes</label>
+      </div>
+    </div>
+  </div>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <% for(let listing of allListings) { %>
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card col listing-card">
+          <div class="main-card">
+            <img src="<%= listing.image && listing.image.url ? listing.image.url : '/images/default.jpg' %>"
+              class="card-img-top" alt="Listing Image" style="height: 15rem;">
+            <div class="card-img-overlay"></div>
+            <div class="card-body">
+              <p class="card-text">
+                <b>
+                  <%= listing.title %>
+                </b><br>
+                &#8377; <span class="price" data-original-price="<%= listing.price %>">
+                  <%= listing.price.toLocaleString("en-IN") %>
+                </span> / Night
+                <i class="tax-info"><b><small>&nbsp; (+18% GST)</small></b></i>
+              </p>
+            </div>
+          </div>
+        </div>
+      </a>
+      <% } %>
+  </div>
+
+
+  <script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+    taxSwitch.addEventListener("change", () => {
+      let priceElements = document.getElementsByClassName("price");
+      let taxInfo = document.getElementsByClassName("tax-info");
+
+      for (info of taxInfo) {
+
+        if (info.style.display != "inline") {
+          info.style.display = "inline";
+        } else {
+          info.style.display = "none";
+        }
+      }
+
+      for (let priceEl of priceElements) {
+        let originalPrice = parseFloat(priceEl.dataset.originalPrice);
+        let finalPrice = originalPrice + (originalPrice * 0.18);
+
+        if (taxSwitch.checked) {
+          priceEl.innerHTML = `${finalPrice.toLocaleString("en-IN")}`;
+        } else {
+          priceEl.innerHTML = `${originalPrice.toLocaleString("en-IN")}`;
+        }
+      }
+    });
+  </script>

@@ -1,0 +1,228 @@
+<% layout("/layouts/boilerplate") -%>
+    <style>
+        .tax-info {
+            display: none;
+        }
+
+
+        .cardd-body {
+            position: relative;
+            overflow: hidden;
+            /* Ensures content does not overflow */
+            word-wrap: break-word;
+            /* Ensures text wraps properly */
+        }
+
+        .starabilityy-result {
+            white-space: nowrap;
+            /* Prevents text from breaking into new lines */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            /* Adds "..." if content overflows */
+            display: flex;
+            /* Ensures proper star alignment */
+            flex-wrap: wrap;
+            /* Allows stars to wrap within the container */
+            justify-content: center;
+            /* Centers stars within the card */
+            max-width: 100%;
+            /* Ensures stars stay inside the box */
+        }
+
+        .cardd {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 250px;
+            /* Set a max width for better layout */
+            margin: auto;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* main card hover effect */
+        .main-card {
+            /* border: 2px solid black; */
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+            padding: 15px;
+            margin-bottom: 2rem;
+
+        }
+
+        .main-card:hover {
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 576px) {
+            .cardd {
+                max-width: 90%;
+                /* Adjusts width for smaller screens */
+            }
+
+            .starabilityy-result {
+                font-size: 0.9rem;
+                /* Adjusts size to prevent overflow */
+            }
+        }
+    </style>
+    <div class="row mt-3">
+        <div class="col-8 offset-3">
+            <h3>
+                <%= listing.title %>
+            </h3>
+        </div>
+        <div class="card col-6 offset-3 listing-card">
+            <div class="main-card">
+
+                <img src="<%= listing.image?.url || '/images/default.jpg' %>" z class="card-img-top show-img"
+                    alt="Listing Image">
+            </div>
+            <div class="card-body">
+
+                <p class="card-text">Owned by <i>
+                        <%= listing.owner.username %>
+                    </i></p>
+
+                <p class="card-text">
+                    <%= listing.description %>
+                </p>
+                <p class="card-text">
+                    <%= listing.location %>
+                </p>
+                <p class="card-text">
+                    <%= listing.country %>
+                </p>
+                <p class="card-text">
+                    <span class="price" data-original-price="<%= listing.price %>">
+                        <%= listing.price.toLocaleString("en-IN") %>
+                    </span> / Night
+                    <i class="tax-info"><b><small>&nbsp; (+18% GST)</small></b></i>
+                </p>
+                <div class="tax-toggle col-6 offset-3">
+                    <div class="form-check-reverse form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Click</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% if(currUser && currUser._id.equals(listing.owner._id)) {%>
+
+            <div class="btns mb-5 col-6 offset-3">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark offset-2 edit-btn"
+                    style="background-color:#fe424d; border: none !important;">Edit</a>
+
+                <form method="post" action="/listings/<%= listing._id %>?_method=DELETE">
+                    <button class="btn btn-dark offset-4">Delete</button>
+                </form>
+            </div>
+            <% } %>
+
+                <div class="col-7 offset-3 mb-3">
+                    <hr />
+                    <% if(currUser) { %>
+                        <h4>Leave a review</h4>
+                        <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation"
+                            novalidate>
+                            <!-- <div class="mt-3 mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <input type="range" min="1" max="5" name="review[rating]" id="rating"
+                                    class="form-range">  -->
+
+                            <div class="mt-3 mb-3">
+                                <label for="rating" class="form-label">Rating</label>
+                                <fieldset class="starability-slot">
+                                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
+                                        value="1" checked aria-label="No rating." />
+                                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                                    <label for="first-rate1" title="Terrible">1 star</label>
+                                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                                    <label for="first-rate2" title="Not good">2 stars</label>
+                                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                                    <label for="first-rate3" title="Average">3 stars</label>
+                                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                                    <label for="first-rate4" title="Very good">4 stars</label>
+                                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                                    <label for="first-rate5" title="Amazing">5 stars</label>
+                                </fieldset>
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label for="comment" class="form-label">Comments</label>
+                                <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control"
+                                    required></textarea>
+                            </div>
+                            <button class="btn btn-outline-dark">Submit</button>
+                        </form>
+                        <% } %>
+
+                            <hr>
+
+
+                            <p><b>All Reviews</b></p>
+                            <div class="row">
+                                <% if (listing.reviews.length===0) { %>
+                                    <p>No reviews yet. Be the first to review!</p>
+                                    <% } %>
+
+                                        <% for (let review of listing.reviews) { %>
+                                            <div class="card cardd col-5 ms-3 mb-3">
+                                                <div class="card-body card-bodyy">
+                                                    <h5 class="card-title">@<%= review.author.username %>
+                                                    </h5>
+                                                    <p class="starability-result card-text starabilityy-result"
+                                                        data-rating="<%= review.rating %>">
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <%= review.comment %>
+                                                    </p>
+
+                                                    <form
+                                                        action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                                        method="POST" class="mb-3">
+                                                        <button class="btn btn-sm btn-dark mt-1">Delete</button>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                            <% } %>
+                            </div>
+
+
+                </div>
+    </div>
+
+
+
+    <script>
+        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+        taxSwitch.addEventListener("change", () => {
+            let priceElements = document.getElementsByClassName("price");
+            let taxInfo = document.getElementsByClassName("tax-info");
+
+            for (info of taxInfo) {
+
+                if (info.style.display != "inline") {
+                    info.style.display = "inline";
+                } else {
+                    info.style.display = "none";
+                }
+            }
+
+            for (let priceEl of priceElements) {
+                let originalPrice = parseFloat(priceEl.dataset.originalPrice);
+                let finalPrice = originalPrice + (originalPrice * 0.18);
+
+                if (taxSwitch.checked) {
+                    priceEl.innerHTML = `${finalPrice.toLocaleString("en-IN")}`;
+                } else {
+                    priceEl.innerHTML = `${originalPrice.toLocaleString("en-IN")}`;
+                }
+            }
+        });
+    </script>

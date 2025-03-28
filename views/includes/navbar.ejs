@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass-drafting"></i></a>
+        <!-- <i class="fa-solid fa-compass"></i> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="/listings">Explore</a>
+            </div>
+            <div class="navbar-nav ms-auto">
+                <form class="form-inline d-flex align-items-center" method="GET" action="/listings">
+                    <input class="form-control search-bar me-2" type="search" name="Search"
+                        placeholder="Search Destination">
+                    <button class="btn btn-outline-success search-btn d-flex align-items-center" type="submit"
+                        onclick="alert('This function is under development')">
+                        <i class="fa-solid fa-magnifying-glass search-btn-glass"></i>
+                        <span class="search-btn-text ms-1">Search</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/listings/new">Add New Lodge</a>
+                <% if (!currUser) { %>
+                    <a class="nav-link " href="/signup"><b>Signup</b></a>
+                    <a class="nav-link" href="/login"><b>login</b></a>
+                    <% } %>
+                        <% if (currUser) { %>
+                            <a class="nav-link" href="/logout"><b>Log-Out</b></a>
+                            <% } %>
+            </div>
+        </div>
+    </div>
+</nav>
