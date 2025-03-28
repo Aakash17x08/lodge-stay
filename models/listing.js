@@ -27,7 +27,7 @@ const listingSchema = new Schema({
   },
 });
 
-//this will de;ete the data from both the review and listing when the listing will get deleted.
+//this will delete the data from both the review and listing when the listing will get deleted.
 listingSchema.post("findOneAndDelete", async function (listing) {
   if (listing) {
     await Review.deleteMany({ _id: { $in: listing.reviews } });
